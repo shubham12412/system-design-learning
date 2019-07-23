@@ -16,6 +16,9 @@ https://www.thoughtco.com/geography-of-the-tropic-of-capricorn-1435191
 7) Geography of the Tropic of Cancer
 https://www.thoughtco.com/geography-of-the-tropic-of-cancer-1435190
 
+8) Major Lines of Latitude and Longitude on a World Map
+https://www.thoughtco.com/equator-hemisphere-tropic-of-cancer-capricorn-1435089
+
 
 
 
