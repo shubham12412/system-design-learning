@@ -2,4 +2,6 @@
 
 2) https://medium.com/@sylwit/geolocation-and-elasticsearch-e9208b1b3161
 
-3) 
+3) https://en.wikipedia.org/wiki/Geohash
+
+4)
