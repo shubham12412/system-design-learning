@@ -270,5 +270,6 @@ CREATE TABLE reservation.guests (
     addresses map<text, frozen<address>>,
     confirm_number text
 ) WITH comment = 'Q9. Find guest by ID';
+
 `
 
