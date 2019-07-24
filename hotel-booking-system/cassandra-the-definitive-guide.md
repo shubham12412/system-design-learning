@@ -216,6 +216,7 @@ CREATE TABLE hotel.amenities_by_room (
     description text,
     PRIMARY KEY ((hotel_id, room_number), amenity_name)
 ) WITH comment = 'Q5. Find amenities for a room';
+
 `
 
 
