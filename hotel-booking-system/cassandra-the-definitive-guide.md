@@ -92,3 +92,50 @@ In order to round out the shopping portion of our data model, we add the ameniti
 Now we switch gears to look at the reservation queries. Figure 5-6 shows a logical data model for reservations. You’ll notice that these tables represent a denormalized design; the same data appears in multiple tables, with differing keys. 
 
 ![denormalized-logical-model-for-reservations.png](./img/denormalized-logical-model-for-reservations.png)
+
+6) 
+
+In order to satisfy Q6, the reservations_by_confirmation table supports the look up of reservations by a unique confirmation number provided to the customer at the time of booking.
+
+7) 
+
+If the guest doesn’t have the confirmation number, the reservations_by_guest table can be used to look up the reservation by guest name. We could envision query Q7 being used on behalf of a guest on a self-serve website or a call center agent trying to assist the guest. Because the guest name might not be unique, we include the guest ID here as a clustering column as well.
+
+8) 
+
+The hotel staff might wish to see a record of upcoming reservations by date in order to get insight into how the hotel is performing, such as what dates the hotel is sold out or undersold. Q8 supports the retrieval of reservations for a given hotel by date.
+
+
+Finally, we create a guests table. You’ll notice that it has similar attributes to our user table from Chapter 4. This provides a single location that we can use to store our guests. In this case, we specify a separate unique identifier for our guest records, as it is not uncommon for guests to have the same name. In many organizations, a customer database such as our guests table would be part of a separate customer management application, which is why we’ve omitted other guest access patterns from our example.
+
+
+### DESIGN QUERIES FOR ALL STAKEHOLDERS
+Q8 and Q9 in particular help to remind us that we need to create queries that support various stakeholders of our application, not just customers but staff as well, and perhaps even the analytics team, suppliers, and so on.
+
+
+----------------------------------------------------------------------------------------------------------------------
+
+### Hotel Physical Data Model
+
+Now let’s get to work on our physical model. First, we need keyspaces for our tables. To keep the design relatively simple, we’ll create a hotel keyspace to contain our tables for hotel and availability data, and a reservation keyspace to contain tables for reservation and guest data. In a real system, we might divide the tables across even more keyspaces in order to separate concerns.
+
+
+For our hotels table, we’ll use Cassandra’s text type to represent the hotel’s id. For the address, we’ll use the address type that we created in Chapter 4. We use the text type to represent the phone number, as there is considerable variance in the formatting of numbers between countries.
+
+As we work to create physical representations of various tables in our logical hotel data model, we use the same approach. The resulting design is 
+
+
+![Hotel-physical-model.png](./img/Hotel-physical-model.png)
+
+
+### Reservation Physical Data Model
+
+Now, let’s turn our attention to the reservation tables in our design. Remember that our logical model contained three denormalized tables to support queries for reservations by confirmation number, guest, and hotel and date. As we work to implement these different designs, we’ll want to consider whether to manage the denormalization manually or use Cassandra’s materialized view capability.
+
+The design shown for the reservation keyspace in Figure 5-9 uses both approaches. We chose to implement reservations_by_hotel_date and reservations_by_guest as regular tables, and reservations_by_confirmation as a materialized view on the reservations_by_hotel_date table. We’ll discuss the reasoning behind this design choice momentarily.
+
+![Reservation-physical-model.png](./img/Reservation-physical-model.png)
+
+Note that we have reproduced the address type in this keyspace and modeled the guest_id as a uuid type in all of our tables.  
+
+
