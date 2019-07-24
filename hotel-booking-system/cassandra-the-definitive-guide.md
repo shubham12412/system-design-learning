@@ -88,3 +88,7 @@ In order to round out the shopping portion of our data model, we add the ameniti
 
 
 
+### Reservation Logical Data Model
+Now we switch gears to look at the reservation queries. Figure 5-6 shows a logical data model for reservations. You’ll notice that these tables represent a denormalized design; the same data appears in multiple tables, with differing keys. 
+
+![denormalized-logical-model-for-reservations.png](./img/denormalized-logical-model-for-reservations.png)
