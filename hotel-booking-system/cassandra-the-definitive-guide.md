@@ -137,5 +137,25 @@ The design shown for the reservation keyspace in Figure 5-9 uses both approaches
 ![Reservation-physical-model.png](./img/Reservation-physical-model.png)
 
 Note that we have reproduced the address type in this keyspace and modeled the guest_id as a uuid type in all of our tables.  
+### Materialized Views
+Materialized views  were introduced to help address some of the shortcomings of secondary indexes, which we discussed in Chapter 4. Creating indexes on columns with high cardinality tends to result in poor performance, because most or all of the nodes in the ring need are queried.
+
+Materialized views address this problem by storing preconfigured views that support queries on additional columns which are not part of the original clustering key. Materialized views simplify application development: instead of the application having to keep multiple denormalized tables in sync, Cassandra takes on the responsibility of updating views in order to keep them consistent with the base table.
+
+Materialized views incur a small performance impact on writes in order to maintain this consistency. However, materialized views demonstrate more efficient performance compared to managing denormalized tables in application clients. Internally, materialized view updates are implemented using batching, which we will discuss in Chapter 9.
+
+
+***Similar to secondary indexes, materialized views can be created on existing tables.***
+
+To understand the syntax and constraints associated with materialized views, we’ll take a look at the CQL command that creates the reservations_by_confirmation table from the reservation physical model:
+
+`
+cqlsh> CREATE MATERIALIZED VIEW reservation.reservations_by_confirmation 
+  AS SELECT * 
+  FROM reservation.reservations_by_hotel_date
+  WHERE confirm_number IS NOT NULL and hotel_id IS NOT NULL and
+    start_date IS NOT NULL and room_number IS NOT NULL
+  PRIMARY KEY (confirm_number, hotel_id, start_date, room_number);
+`
 
 
